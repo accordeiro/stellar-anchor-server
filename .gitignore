@@ -1,0 +1,34 @@
+# dependencies
+node_modules
+
+# testing
+/coverage
+
+# deployment
+/build
+/.build
+/dist
+.webpack
+.serverless
+.terraform
+terraform.tfstate*
+
+# misc
+.DS_Store
+*.env.local
+/.vscode/chrome
+.serverless
+.idea
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editors
+*.swp
+*.swo
+
+selenium-debug.log
+
+# dotenv
+.env

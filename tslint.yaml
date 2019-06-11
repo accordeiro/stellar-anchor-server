@@ -1,0 +1,25 @@
+---
+extends: "tslint:recommended"
+defaultSeverity: warning
+rules:
+    max-classes-per-file: false
+    new-parens: true
+    no-arg: true
+    no-bitwise: true
+    no-conditional-assignment: true
+    no-consecutive-blank-lines: false
+    object-literal-sort-keys: false
+    ordered-imports: false
+    radix: false
+    forin: false
+    arrow-parens: false
+    no-console:
+        severity: warning
+        options:
+            - debug
+            - info
+            - log
+            - time
+            - timeEnd
+            - trace
+jsRules:
