@@ -17,4 +17,16 @@ export class InfoField {
 
   @Column("simple-array")
   public choices: string[];
+
+  constructor(
+    name: string,
+    description: string,
+    optional: boolean = true,
+    choices: string[] = [],
+  ) {
+    this.name = name;
+    this.description = description;
+    this.optional = optional;
+    this.choices = choices;
+  }
 }

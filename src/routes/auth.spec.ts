@@ -1,22 +1,27 @@
 import * as chai from "chai";
 import chaiHttp = require("chai-http");
 import "mocha";
-import { createConnection } from "typeorm";
+import { Connection, createConnection } from "typeorm";
 import app from "../app";
 import { DBTest } from "../utils/DBTest";
 
 chai.use(chaiHttp);
 let dbTest: DBTest;
+let conn: Connection;
 
 describe("Authentication APIs", () => {
   before(async () => {
-    const conn = await createConnection();
+    conn = await createConnection();
     dbTest = new DBTest(conn);
   });
 
   beforeEach(async () => {
     await dbTest.cleanUp();
     await dbTest.createAdminUser();
+  });
+
+  after(async () => {
+    await conn.close();
   });
 
   it("Should return token on login", async () => {
