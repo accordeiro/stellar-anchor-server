@@ -3,7 +3,7 @@ var db = process.env.DATABASE || "database.sqlite";
 module.exports = {
    "type": "sqlite",
    "database": db,
-   "synchronize": true,
+   "synchronize": false,
    "logging": false,
    "entities": [
       "src/entity/**/*.ts"
@@ -11,6 +11,7 @@ module.exports = {
    "migrations": [
       "src/migration/**/*.ts"
    ],
+   "migrationsTableName": "typeorm_migrations",
    "subscribers": [
       "src/subscriber/**/*.ts"
    ],
