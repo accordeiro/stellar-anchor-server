@@ -1,0 +1,21 @@
+{
+   "compilerOptions": {
+      "lib": [
+         "es5",
+         "es6"
+      ],
+      "target": "es5",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "outDir": "./build",
+      "allowSyntheticDefaultImports": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "noImplicitAny":true,
+      "noImplicitReturns":true,
+      "strictNullChecks": true,
+      "sourceMap": true,
+      "downlevelIteration": true,
+      "noUnusedLocals": true
+   }
+}
