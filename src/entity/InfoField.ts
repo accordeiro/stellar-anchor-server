@@ -1,8 +1,12 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity()
+@Unique(["name"])
 export class InfoField {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  public id: number;
+
+  @Column()
   public name: string;
 
   @Column()

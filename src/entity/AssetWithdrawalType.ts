@@ -1,9 +1,20 @@
-import { Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from "typeorm";
 import { InfoField } from "./InfoField";
 
 @Entity()
+@Unique(["name"])
 export class AssetWithdrawalType {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  public id: number;
+
+  @Column()
   public name: string;
 
   @ManyToMany(type => InfoField)

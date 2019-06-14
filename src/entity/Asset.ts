@@ -1,11 +1,22 @@
 import { Length } from "class-validator";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from "typeorm";
 import { AssetWithdrawalType } from "./AssetWithdrawalType";
 import { InfoField } from "./InfoField";
 
 @Entity()
+@Unique(["name"])
 export class Asset {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  public id: number;
+
+  @Column()
   @Length(4, 12)
   public name: string;
 
