@@ -8,7 +8,7 @@ const DEFAULT_JWT_DURATION: string = process.env.DEFAULT_JWT_DURATION || "7d";
 const PORT = process.env.PORT || 8080;
 
 if (JWT_SECRET === "") {
-  throw new Error("JWT Token must be set");
+  throw new Error("JWT_SECRET must be set");
 }
 
 export default { JWT_SECRET, DEFAULT_JWT_DURATION, PORT };

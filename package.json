@@ -43,8 +43,8 @@
     "start": "set debug=* && ts-node-dev --respawn --transpileOnly ./src/index.ts",
     "prod": "tsc && node ./build/app.js",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
-    "pretest": "DATABASE=test.sqlite NODE_ENV=test ts-node ./node_modules/typeorm/cli.js migration:run",
-    "test": "DATABASE=test.sqlite NODE_ENV=test nyc mocha -r ts-node/register src/**/*.spec.ts",
+    "pretest": "DATABASE=test.sqlite NODE_ENV=test JWT_SECRET=test ts-node ./node_modules/typeorm/cli.js migration:run",
+    "test": "DATABASE=test.sqlite NODE_ENV=test JWT_SECRET=test nyc mocha -r ts-node/register src/**/*.spec.ts",
     "posttest": "rm -rf test.sqlite",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
