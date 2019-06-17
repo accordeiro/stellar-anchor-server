@@ -37,4 +37,9 @@ jobs:
       - run: npm test
 
       # report coverage:
-      - run: npm run coverage
+      - run: |
+          if [ "$CIRCLE_PR_USERNAME" == "" ]; then
+            # Should only run this on non-forked Pull Requests, since Circle CI
+            # does not pass along the coveralls token to forked repos.
+            npm run coverage
+          fi
