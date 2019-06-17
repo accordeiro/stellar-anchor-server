@@ -8,6 +8,6 @@ const routes = Router();
 
 routes.use(`${apiPath}/auth`, auth);
 routes.use(`${apiPath}/users`, user);
-routes.use(`${apiPath}/info_field`, infoField);
+routes.use(`${apiPath}/info_fields`, infoField);
 
 export default routes;
