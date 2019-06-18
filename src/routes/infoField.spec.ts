@@ -225,4 +225,18 @@ describe("InfoField APIs", () => {
         chai.expect(res).to.have.status(200);
       });
   });
+
+  it("Should allow admins to delete info fields", async () => {
+    const token = await dbTest.getAdminJWT();
+    const infoFields = await createTestInfoFields();
+    const firstInfoFieldId = infoFields[0].id;
+
+    return chai
+      .request(app)
+      .delete(`/api/v1/info_fields/${firstInfoFieldId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .then(res => {
+        chai.expect(res).to.have.status(204);
+      });
+  });
 });
