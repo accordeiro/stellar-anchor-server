@@ -28,7 +28,12 @@ class InfoFieldController {
   public static newInfoField = async (req: Request, res: Response) => {
     let infoField: InfoField;
     try {
-      infoField = req.body;
+      infoField = new InfoField(
+        req.body.name,
+        req.body.description,
+        req.body.optional,
+        req.body.choices,
+      );
     } catch (e) {
       res.status(400).send();
       return;
@@ -40,15 +45,16 @@ class InfoFieldController {
       return;
     }
 
+    let dbInfoField: InfoField;
     const infoFieldRepository = getRepository(InfoField);
     try {
-      await infoFieldRepository.save(infoField);
+      dbInfoField = await infoFieldRepository.save(infoField);
     } catch (e) {
       res.status(409).send("InfoField name already in use");
       return;
     }
 
-    res.status(201).send("InfoField created");
+    res.status(201).send(dbInfoField);
   }
 
   public static editInfoField = async (req: Request, res: Response) => {
@@ -74,13 +80,15 @@ class InfoFieldController {
       return;
     }
 
+    let dbInfoField: InfoField;
     try {
-      await infoFieldRepository.save(infoField);
+      dbInfoField = await infoFieldRepository.save(infoField);
     } catch (e) {
-      res.status(409).send("InfoFieldname already in use");
+      res.status(409).send("InfoField name already in use");
       return;
     }
-    res.status(204).send();
+
+    res.status(200).send(dbInfoField);
   }
 
   public static deleteInfoField = async (req: Request, res: Response) => {

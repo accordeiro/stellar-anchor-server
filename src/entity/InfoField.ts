@@ -1,3 +1,4 @@
+import { IsNotEmpty } from "class-validator";
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity()
@@ -7,12 +8,14 @@ export class InfoField {
   public id: number;
 
   @Column()
+  @IsNotEmpty()
   public name: string;
 
   @Column()
+  @IsNotEmpty()
   public description: string;
 
-  @Column()
+  @Column({ default: false })
   public optional: boolean;
 
   @Column("simple-array")
