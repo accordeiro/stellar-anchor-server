@@ -61,4 +61,29 @@ export class Asset {
   @ManyToMany(type => AssetWithdrawalType)
   @JoinTable()
   public withdrawalTypes: AssetWithdrawalType[];
+  constructor(
+    name: string,
+    depositEnabled: boolean = false,
+    depositFeeFixed: number = 0.1,
+    depositFeePercent: number = 0.1,
+    depositMinAmount: number = 0.1,
+    depositMaxAmount: number = 0.1,
+    withdrawalEnabled: boolean = false,
+    withdrawalFeeFixed: number = 0.1,
+    withdrawalFeePercent: number = 0.1,
+    withdrawalMinAmount: number = 0.1,
+    withdrawalMaxAmount: number = 0.1,
+  ) {
+    this.name = name;
+    this.depositEnabled = depositEnabled;
+    this.depositFeeFixed = depositFeeFixed;
+    this.depositFeePercent = depositFeePercent;
+    this.depositMinAmount = depositMinAmount;
+    this.depositMaxAmount = depositMaxAmount;
+    this.withdrawalEnabled = withdrawalEnabled;
+    this.withdrawalFeeFixed = withdrawalFeeFixed;
+    this.withdrawalFeePercent = withdrawalFeePercent;
+    this.withdrawalMinAmount = withdrawalMinAmount;
+    this.withdrawalMaxAmount = withdrawalMaxAmount;
+  }
 }
