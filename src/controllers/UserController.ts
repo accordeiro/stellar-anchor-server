@@ -29,7 +29,7 @@ class UserController {
     res.status(200).send(user);
   }
 
-  public static newUser = async (req: Request, res: Response) => {
+  public static create = async (req: Request, res: Response) => {
     const { username, password, role } = req.body;
     const user = new User(username, role);
     user.setPassword(password);
@@ -51,7 +51,7 @@ class UserController {
     res.status(201).send("User created");
   }
 
-  public static editUser = async (req: Request, res: Response) => {
+  public static edit = async (req: Request, res: Response) => {
     const id = req.params.id;
     const { username, role } = req.body;
 
@@ -81,7 +81,7 @@ class UserController {
     res.status(204).send();
   }
 
-  public static deleteUser = async (req: Request, res: Response) => {
+  public static remove = async (req: Request, res: Response) => {
     const id = req.params.id;
 
     const userRepository = getRepository(User);

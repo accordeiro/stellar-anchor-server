@@ -21,19 +21,19 @@ router.get(
 router.post(
   "/",
   [checkUser, checkRole([Role.Admin])],
-  InfoFieldController.newInfoField,
+  InfoFieldController.create,
 );
 
 router.patch(
   "/:id([0-9]+)",
   [checkUser, checkRole([Role.Admin])],
-  InfoFieldController.editInfoField,
+  InfoFieldController.edit,
 );
 
 router.delete(
   "/:id([0-9]+)",
   [checkUser, checkRole([Role.Admin])],
-  InfoFieldController.deleteInfoField,
+  InfoFieldController.remove,
 );
 
 export default router;

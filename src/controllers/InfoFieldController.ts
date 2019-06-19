@@ -25,7 +25,7 @@ class InfoFieldController {
     res.status(200).send(infoField);
   }
 
-  public static newInfoField = async (req: Request, res: Response) => {
+  public static create = async (req: Request, res: Response) => {
     let infoField: InfoField;
     try {
       infoField = new InfoField(
@@ -57,7 +57,7 @@ class InfoFieldController {
     res.status(201).send(dbInfoField);
   }
 
-  public static editInfoField = async (req: Request, res: Response) => {
+  public static edit = async (req: Request, res: Response) => {
     const id = req.params.id;
     let infoField: InfoField;
 
@@ -91,7 +91,7 @@ class InfoFieldController {
     res.status(200).send(dbInfoField);
   }
 
-  public static deleteInfoField = async (req: Request, res: Response) => {
+  public static remove = async (req: Request, res: Response) => {
     const id = req.params.id;
 
     const infoFieldRepository = getRepository(InfoField);

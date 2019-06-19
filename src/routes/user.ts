@@ -14,18 +14,18 @@ router.get(
   UserController.getOneById,
 );
 
-router.post("/", [checkUser, checkRole([Role.Admin])], UserController.newUser);
+router.post("/", [checkUser, checkRole([Role.Admin])], UserController.create);
 
 router.patch(
   "/:id([0-9]+)",
   [checkUser, checkRole([Role.Admin])],
-  UserController.editUser,
+  UserController.edit,
 );
 
 router.delete(
   "/:id([0-9]+)",
   [checkUser, checkRole([Role.Admin])],
-  UserController.deleteUser,
+  UserController.remove,
 );
 
 export default router;
