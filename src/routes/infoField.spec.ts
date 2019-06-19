@@ -215,7 +215,6 @@ describe("InfoField APIs", () => {
       .set("Authorization", `Bearer ${token}`)
       .send(infoFieldPatch)
       .then(res => {
-        console.log(res.body);
         chai.expect(res.body).to.include({
           name: "method",
           description: "type of deposit to make",
