@@ -2,21 +2,26 @@ import { validate } from "class-validator";
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Asset } from "../entity/Asset";
+import { InfoField } from "../entity/InfoField";
 
 class AssetController {
   public static listAll = async (req: Request, res: Response) => {
-    const infoFieldRepository = getRepository(Asset);
-    const infoFields = await infoFieldRepository.find();
+    const assetRepository = getRepository(Asset);
+    const infoFields = await assetRepository.find({
+      relations: ["depositInfoFields"],
+    });
 
     res.send(infoFields);
   }
 
   public static getOneById = async (req: Request, res: Response) => {
     const id: number = req.params.id;
-    const infoFieldRepository = getRepository(Asset);
+    const assetRepository = getRepository(Asset);
     let asset: Asset;
     try {
-      asset = await infoFieldRepository.findOneOrFail(id);
+      asset = await assetRepository.findOneOrFail(id, {
+        relations: ["depositInfoFields"],
+      });
     } catch (error) {
       res.status(404).send("Asset not found");
       return;
@@ -52,25 +57,43 @@ class AssetController {
       return;
     }
 
-    let dbInfoField: Asset;
-    const infoFieldRepository = getRepository(Asset);
+    // Validate deposit InfoFields:
+    const depositInfoFieldIds = req.body.depositInfoFields as number[];
+    let depositInfoFields: InfoField[];
+
+    if (depositInfoFieldIds) {
+      const infoFieldRepository = getRepository(InfoField);
+      depositInfoFields = await infoFieldRepository.findByIds(
+        depositInfoFieldIds,
+      );
+
+      if (depositInfoFields.length !== depositInfoFieldIds.length) {
+        res.status(404).send("One or more depositInfoFields were not found");
+        return;
+      }
+
+      asset.depositInfoFields = depositInfoFields;
+    }
+
+    let dbAsset: Asset;
+    const assetRepository = getRepository(Asset);
     try {
-      dbInfoField = await infoFieldRepository.save(asset);
+      dbAsset = await assetRepository.save(asset);
     } catch (e) {
       res.status(409).send("Asset name already in use");
       return;
     }
 
-    res.status(201).send(dbInfoField);
+    res.status(201).send(dbAsset);
   }
 
   public static edit = async (req: Request, res: Response) => {
     const id = req.params.id;
     let asset: Asset;
 
-    const infoFieldRepository = getRepository(Asset);
+    const assetRepository = getRepository(Asset);
     try {
-      asset = await infoFieldRepository.findOneOrFail(id);
+      asset = await assetRepository.findOneOrFail(id);
     } catch (error) {
       res.status(404).send("Asset not found");
       return;
@@ -104,7 +127,7 @@ class AssetController {
 
     let dbInfoField: Asset;
     try {
-      dbInfoField = await infoFieldRepository.save(asset);
+      dbInfoField = await assetRepository.save(asset);
     } catch (e) {
       res.status(409).send("Asset name already in use");
       return;
@@ -116,14 +139,14 @@ class AssetController {
   public static remove = async (req: Request, res: Response) => {
     const id = req.params.id;
 
-    const infoFieldRepository = getRepository(Asset);
+    const assetRepository = getRepository(Asset);
     try {
-      await infoFieldRepository.findOneOrFail(id);
+      await assetRepository.findOneOrFail(id);
     } catch (error) {
       res.status(404).send("Asset not found");
       return;
     }
-    infoFieldRepository.delete(id);
+    assetRepository.delete(id);
     res.status(204).send();
   }
 }
