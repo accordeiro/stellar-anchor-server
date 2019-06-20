@@ -366,6 +366,50 @@ describe("Asset APIs", () => {
     const token = await dbTest.getAdminJWT();
     const assets = await createTestAssets();
     const dbAssetId = assets[1].id;
+    const emailAddressInfoField = assets[1].depositInfoFields.filter(
+      i => i.name === "email_address",
+    )[0];
+    const assetPatch = {
+      name: "ANOTHERNAME",
+      depositInfoFields: [emailAddressInfoField],
+    };
+
+    return chai
+      .request(app)
+      .patch(`/api/v1/assets/${dbAssetId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send(assetPatch)
+      .then(res => {
+        chai.expect(res.body).to.include({
+          name: "ANOTHERNAME",
+          depositEnabled: true,
+          depositFeeFixed: 1.0,
+          depositFeePercent: 0.05,
+          depositMinAmount: 50.0,
+          depositMaxAmount: 100000.0,
+          withdrawalEnabled: true,
+          withdrawalFeeFixed: 1.0,
+          withdrawalFeePercent: 0.05,
+          withdrawalMinAmount: 200.0,
+          withdrawalMaxAmount: 10000.0,
+        });
+
+        chai.expect(res.body.depositInfoFields.length).to.be.equal(1);
+        chai.expect(res.body.depositInfoFields[0]).to.include({
+          name: "email_address",
+          description: "your email address for transaction status updates",
+          optional: true,
+        });
+        chai.expect(res.body.depositInfoFields[0].choices).to.be.an("array")
+          .that.is.empty;
+        chai.expect(res).to.have.status(200);
+      });
+  });
+
+  it("Should not delete the list of depositInfoFields unless an empty array is provided", async () => {
+    const token = await dbTest.getAdminJWT();
+    const assets = await createTestAssets();
+    const dbAssetId = assets[1].id;
     const assetPatch = {
       name: "ANOTHERNAME",
     };
@@ -389,6 +433,32 @@ describe("Asset APIs", () => {
           withdrawalMinAmount: 200.0,
           withdrawalMaxAmount: 10000.0,
         });
+
+        const eurtAsset = res.body;
+        chai.expect(eurtAsset.depositInfoFields.length).to.be.equal(2);
+        const eurtAssetDepositInfoFieldEmail = eurtAsset.depositInfoFields.filter(
+          (item: any) => item.name == "email_address",
+        )[0];
+        const eurtAssetDepositInfoFieldType = eurtAsset.depositInfoFields.filter(
+          (item: any) => item.name == "type",
+        )[0];
+
+        chai.expect(eurtAssetDepositInfoFieldEmail).to.include({
+          name: "email_address",
+          description: "your email address for transaction status updates",
+          optional: true,
+        });
+        chai.expect(eurtAssetDepositInfoFieldEmail.choices).to.be.an("array")
+          .that.is.empty;
+
+        chai.expect(eurtAssetDepositInfoFieldType).to.include({
+          name: "type",
+          description: "type of deposit to make",
+          optional: false,
+        });
+        chai
+          .expect(eurtAssetDepositInfoFieldType.choices)
+          .to.eql(["SEPA", "SWIFT", "cash"]);
         chai.expect(res).to.have.status(200);
       });
   });

@@ -58,22 +58,17 @@ class AssetController {
     }
 
     // Validate deposit InfoFields:
-    const depositInfoFieldIds = req.body.depositInfoFields as number[];
-    let depositInfoFields: InfoField[];
+    const depositInfoFieldIds = (req.body.depositInfoFields as number[]) || [];
+    const depositInfoFields = await AssetController.findInfoFields(
+      depositInfoFieldIds,
+    );
 
-    if (depositInfoFieldIds) {
-      const infoFieldRepository = getRepository(InfoField);
-      depositInfoFields = await infoFieldRepository.findByIds(
-        depositInfoFieldIds,
-      );
-
-      if (depositInfoFields.length !== depositInfoFieldIds.length) {
-        res.status(404).send("One or more depositInfoFields were not found");
-        return;
-      }
-
-      asset.depositInfoFields = depositInfoFields;
+    if (depositInfoFields.length !== depositInfoFieldIds.length) {
+      res.status(404).send("One or more depositInfoFields were not found");
+      return;
     }
+
+    asset.depositInfoFields = depositInfoFields;
 
     let dbAsset: Asset;
     const assetRepository = getRepository(Asset);
@@ -93,7 +88,9 @@ class AssetController {
 
     const assetRepository = getRepository(Asset);
     try {
-      asset = await assetRepository.findOneOrFail(id);
+      asset = await assetRepository.findOneOrFail(id, {
+        relations: ["depositInfoFields"],
+      });
     } catch (error) {
       res.status(404).send("Asset not found");
       return;
@@ -125,15 +122,29 @@ class AssetController {
       return;
     }
 
-    let dbInfoField: Asset;
+    // Validate deposit InfoFields:
+    const depositInfoFieldIds = req.body.depositInfoFields as number[];
+    if (depositInfoFieldIds) {
+      const depositInfoFields = await AssetController.findInfoFields(
+        depositInfoFieldIds,
+      );
+      if (depositInfoFields.length !== depositInfoFieldIds.length) {
+        res.status(404).send("One or more depositInfoFields were not found");
+        return;
+      }
+
+      asset.depositInfoFields = depositInfoFields;
+    }
+
+    let dbAsset: Asset;
     try {
-      dbInfoField = await assetRepository.save(asset);
+      dbAsset = await assetRepository.save(asset);
     } catch (e) {
       res.status(409).send("Asset name already in use");
       return;
     }
 
-    res.status(200).send(dbInfoField);
+    res.status(200).send(dbAsset);
   }
 
   public static remove = async (req: Request, res: Response) => {
@@ -148,6 +159,14 @@ class AssetController {
     }
     assetRepository.delete(id);
     res.status(204).send();
+  }
+
+  public static findInfoFields = async (
+    infoFieldIds: number[],
+  ): Promise<InfoField[]> => {
+    const infoFieldRepository = getRepository(InfoField);
+    const infoFields = await infoFieldRepository.findByIds(infoFieldIds);
+    return infoFields;
   }
 }
 
