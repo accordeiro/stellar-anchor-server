@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from "typeorm";
-import { AssetWithdrawalType } from "./AssetWithdrawalType";
 import { InfoField } from "./InfoField";
+import { WithdrawalType } from "./WithdrawalType";
 
 @Entity()
 @Unique(["name"])
@@ -58,9 +58,10 @@ export class Asset {
   @Column("double")
   public withdrawalMaxAmount: number;
 
-  @ManyToMany(type => AssetWithdrawalType)
+  @ManyToMany(type => WithdrawalType)
   @JoinTable()
-  public withdrawalTypes: AssetWithdrawalType[];
+  public withdrawalTypes: WithdrawalType[];
+
   constructor(
     name: string,
     depositEnabled: boolean = false,
