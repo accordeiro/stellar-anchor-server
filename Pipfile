@@ -17,6 +17,7 @@ django = "*"
 django-environ = "*"
 django-model-utils = "*"
 djangorestframework = "*"
+django-multiselectfield = "*"
 
 [requires]
 python_version = "3.7"

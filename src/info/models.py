@@ -1,9 +1,13 @@
 from django.core.validators import MinLengthValidator
 from django.db import models
 from model_utils.models import TimeStampedModel
+from model_utils import Choices
+from multiselectfield import MultiSelectField
 
 
 class Asset(TimeStampedModel):
+    DEPOSIT_TYPE_CHOICES = Choices("SWIFT", "BTC")
+
     name = models.TextField(unique=True, validators=[MinLengthValidator(1)])
 
     # Deposit-related info
@@ -13,6 +17,9 @@ class Asset(TimeStampedModel):
     deposit_min_amount = models.FloatField()
     deposit_max_amount = models.FloatField()
     deposit_fields = models.ManyToManyField("info.InfoField")
+    deposit_types = MultiSelectField(
+        choices=DEPOSIT_TYPE_CHOICES, default=DEPOSIT_TYPE_CHOICES.SWIFT, max_length=30
+    )
 
     # Withdrawal-related info
     withdrawal_enabled = models.BooleanField(null=False, default=True)
@@ -35,6 +42,3 @@ class InfoField(TimeStampedModel):
     name = models.TextField(blank=False, validators=[MinLengthValidator(1)])
     description = models.TextField()
     optional = models.BooleanField(null=False, default=False)
-    choices = models.TextField(null=True, blank=True)
-
-    # TODO: ensure `choices` is serialized as a JSON array on model validation
