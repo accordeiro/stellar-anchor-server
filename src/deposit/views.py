@@ -143,8 +143,10 @@ def interactive_deposit(request):
             )
             transaction.save()
             create_stellar_deposit.delay(transaction.id)
-            # TODO: Use the proposed callback approach.
-            return render(request, "deposit/success.html")
+
+            serializer = TransactionSerializer(transaction)
+            tx_json = json.dumps({"transaction": serializer.data})
+            return render(request, "deposit/success.html", context={"tx_json": tx_json})
     return render(request, "deposit/form.html", {"form": form})
 
 
