@@ -21,4 +21,6 @@ RUN pipenv install
 EXPOSE 6379
 EXPOSE 8000
 
+CMD ["pipenv", "run", "python", "src/manage.py", "makemigrations"]
+CMD ["pipenv", "run", "python", "src/manage.py", "migrate"]
 CMD ["pipenv", "run", "python", "src/manage.py", "runserver", "0.0.0.0:8000"]
