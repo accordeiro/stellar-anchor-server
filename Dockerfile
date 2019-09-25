@@ -17,12 +17,4 @@ RUN pip install pipenv
 RUN pipenv update
 RUN pipenv install
 
-# Expose the ports for Redis and the server.
-EXPOSE 6379
-EXPOSE 8000
-
-# Make sure models are up-to-date.
-RUN ["pipenv", "run", "python", "src/manage.py", "makemigrations"]
-RUN ["pipenv", "run", "python", "src/manage.py", "migrate"]
-
 CMD ["pipenv", "run", "python", "src/manage.py", "runserver", "0.0.0.0:8000"]
